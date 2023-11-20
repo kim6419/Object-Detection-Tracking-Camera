@@ -1,0 +1,36 @@
+`haarcascade_frontalface_alt.xml` 파일은 Haar Cascade 분류기를 담고 있는 XML 파일입니다. Haar Cascade는 컴퓨터 비전 분야, 특히 물체 인식에 사용됩니다. 이 XML 파일은 분류기가 물체를 인식하는 데 사용하는 특징들을 정의합니다.
+
+Haar Cascade 작동 원리:
+
+1. 이미지의 부분 영역에 적용되는 일련의 필터(특징)를 포함합니다.
+2. 각 필터는 특정 타입의 특징(가장자리나 질감 변화 등)을 감지하는 간단한 분류기로 훈련됩니다.
+3. 필터들은 다양한 크기의 물체를 감지할 수 있도록 여러 스케일로 적용됩니다.
+4. 이 필터들의 결과는 결합되어 물체(얼굴)의 존재 여부를 판단합니다.
+
+Haar Cascade는 OpenCV와 함께 자주 사용됩니다. 다음은 OpenCV를 사용하여 분류기를 로드하고 이미지에서 얼굴을 감지하며 감지된 얼굴 주위에 사각형을 그리는 Python 예시 코드입니다:
+
+```python
+import cv2
+
+# Haar cascade 파일을 로드합니다.
+face_cascade = cv2.CascadeClassifier('path/to/haarcascade_frontalface_alt.xml')
+
+# 이미지를 읽어옵니다.
+image = cv2.imread('path/to/image.jpg')
+
+# 그레이스케일로 변환합니다.
+gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+# 이미지에서 얼굴을 감지합니다.
+faces = face_cascade.detectMultiScale(gray_image, scaleFactor=1.1, minNeighbors=5)
+
+# 감지된 얼굴 주위에 사각형을 그립니다.
+for (x, y, w, h) in faces:
+    cv2.rectangle(image, (x, y), (x+w, y+h), (255, 0, 0), 2)
+
+# 이미지를 표시합니다.
+cv2.imshow('Image', image)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+```
+이 코드는 Haar Cascade를 로드하고 제공된 이미지에서 얼굴을 감지한 다음 감지된 얼굴 주위에 사각형을 그립니다. `detectMultiScale` 함수는 입력 이미지에서 물체(얼굴)를 감지하는 데 중요합니다. `scaleFactor`와 `minNeighbors` 매개변수는 감지 창이 얼마나 스케일되는지와 각 사각형이 얼굴 후보로 유지되기 위해 가져야 하는 이웃의 수를 각각 지정하는 데 사용됩니다.
